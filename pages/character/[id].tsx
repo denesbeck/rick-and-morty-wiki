@@ -1,5 +1,7 @@
 import Image from 'next/image'
-import useRenderStatus from '../../hooks/useRenderStatus'
+import useRenderStatus from 'hooks/useRenderStatus'
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
+import Head from 'next/head'
 
 function Character({ data }) {
     const [renderStatus] = useRenderStatus()
@@ -12,32 +14,37 @@ function Character({ data }) {
     )
 
     return (
-        <div className='grid h-screen items-center justify-center'>
-            <div className='relative h-max w-max min-w-[18rem] py-4'>
-                <Image
-                    width={500}
-                    height={500}
-                    layout='responsive'
-                    loader={() => data.image}
-                    src={data.image}
-                    alt='character_image'
-                />
-                <div className='mt-2'>
-                    <div className='flex space-x-6'>
-                        <div className='py-2 text-2xl font-bold text-slate-800'>{data.name}</div>
-                        <div className='relative top-3'>{renderStatus(data.status)}</div>
+        <>
+            <Head>
+                <title>{'Rick & Morty Wiki | ' + data.name}</title>
+            </Head>
+            <div className='grid h-screen items-center justify-center'>
+                <div className='relative h-max w-max min-w-[18rem] py-4'>
+                    <Image
+                        width={500}
+                        height={500}
+                        layout='responsive'
+                        loader={() => data.image}
+                        src={data.image}
+                        alt='character_image'
+                    />
+                    <div className='mt-2'>
+                        <div className='flex space-x-6'>
+                            <div className='py-2 text-2xl font-bold text-slate-800'>{data.name}</div>
+                            <div className='relative top-3'>{renderStatus(data.status)}</div>
+                        </div>
+                        {renderDetails('Gender:', data.gender)}
+                        {renderDetails('Location:', data.location.name)}
+                        {renderDetails('Origin:', data.origin.name)}
+                        {renderDetails('Species:', data.species)}
                     </div>
-                    {renderDetails('Gender:', data.gender)}
-                    {renderDetails('Location:', data.location.name)}
-                    {renderDetails('Origin:', data.origin.name)}
-                    {renderDetails('Species:', data.species)}
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
     const res = await fetch('https://rickandmortyapi.com/api/character/')
     const data = await res.json()
     const paths = Array.from({ length: data.info.count }, (_, i) => i + 1).map((characterId) => {
@@ -49,7 +56,7 @@ export async function getStaticPaths() {
     return { paths, fallback: false }
 }
 
-export async function getStaticProps(context) {
+export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext) => {
     const { params } = context
     const res = await fetch(`https://rickandmortyapi.com/api/character/${params.id}`)
     const data = await res.json()

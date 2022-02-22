@@ -1,8 +1,9 @@
-import type { NextPage } from 'next'
-import { EpisodeSchema } from '../../interfaces/global'
-import { Characters, Header, Navigator } from '../../components'
+import type { NextPage, GetStaticPaths, GetStaticPropsContext, GetStaticProps } from 'next'
+import { EpisodeSchema } from 'interfaces/global'
+import { Characters, Header, Navigator } from 'components'
 import { VStack, Select, Center } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 
 interface Props {
@@ -39,43 +40,48 @@ const Episode: NextPage<Props> = ({ episode, episodeIds }) => {
     }
 
     return (
-        <VStack spacing={'2rem'}>
-            <Navigator />
-            <Header name={info.name} airDate={info.airDate} />
-            <div className='grid w-full grid-cols-10'>
-                <div className='col-span-full mx-4 mb-12 xl:col-span-3 xl:col-start-1 xl:mx-20'>
-                    <Center className='mb-4 text-2xl'>Pick Episode</Center>
-                    <Center>
-                        <Select
-                            onChange={(e) => {
-                                e.target.value !== '' ? router.push(`/episode/${parseInt(e.target.value)}`) : `/episode/${1}`
-                            }}
-                            shadow={'sm'}
-                            maxW={'22rem'}
-                        >
-                            {episodeIds.map((episode) => {
-                                return (
-                                    <option
-                                        key={episode.id}
-                                        value={episode.id}
-                                        selected={id.toString() === episode.id.toString() ? true : false}
-                                    >
-                                        {`Episode - ${episode.id.toString().padStart(2, '0')}`}
-                                    </option>
-                                )
-                            })}
-                        </Select>
-                    </Center>
+        <>
+            <Head>
+                <title>Rick & Morty Wiki | Episodes</title>
+            </Head>
+            <VStack spacing={'2rem'}>
+                <Navigator />
+                <Header name={info.name} airDate={info.airDate} />
+                <div className='grid w-full grid-cols-10'>
+                    <div className='col-span-full mx-4 mb-12 xl:col-span-3 xl:col-start-1 xl:mx-20'>
+                        <Center className='mb-4 text-2xl'>Pick Episode</Center>
+                        <Center>
+                            <Select
+                                onChange={(e) => {
+                                    e.target.value !== '' ? router.push(`/episode/${parseInt(e.target.value)}`) : `/episode/${1}`
+                                }}
+                                shadow={'sm'}
+                                maxW={'22rem'}
+                            >
+                                {episodeIds.map((episode) => {
+                                    return (
+                                        <option
+                                            key={episode.id}
+                                            value={episode.id}
+                                            selected={id.toString() === episode.id.toString() ? true : false}
+                                        >
+                                            {`Episode - ${episode.id.toString().padStart(2, '0')}`}
+                                        </option>
+                                    )
+                                })}
+                            </Select>
+                        </Center>
+                    </div>
+                    <div className='col-span-8 col-start-2 pb-20 xs:col-span-6 xs:col-start-3 lg:col-span-6 lg:col-start-3 xl:col-span-4 xl:col-start-4'>
+                        <Characters characters={characters} />
+                    </div>
                 </div>
-                <div className='col-span-8 col-start-2 pb-20 xs:col-span-6 xs:col-start-3 lg:col-span-6 lg:col-start-3 xl:col-span-4 xl:col-start-4'>
-                    <Characters characters={characters} />
-                </div>
-            </div>
-        </VStack>
+            </VStack>
+        </>
     )
 }
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
     const res = await fetch('https://rickandmortyapi.com/api/episode/')
     const data = await res.json()
     const paths = Array.from({ length: data.info.count }, (_, i) => i + 1).map((episodeId) => {
@@ -87,9 +93,10 @@ export async function getStaticPaths() {
     return { paths, fallback: false }
 }
 
-export async function getStaticProps(context) {
+export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext) => {
     const { params } = context
-    const episodeIds = Array.from({ length: 52 }, (_, i) => i + 1).map((el) => {
+    const episodeCount = await fetch('https://rickandmortyapi.com/api/episode/').then((res) => res.json())
+    const episodeIds = Array.from({ length: episodeCount.info.count }, (_, i) => i + 1).map((el) => {
         return { id: el }
     })
     const res = await fetch(`https://rickandmortyapi.com/api/episode/${params.id}`)

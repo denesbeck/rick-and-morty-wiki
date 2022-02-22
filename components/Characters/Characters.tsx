@@ -1,6 +1,6 @@
-import { Character, ErrorPage } from '..'
+import { Character, ErrorPage } from 'components'
 import { Spinner, Center } from '@chakra-ui/react'
-import { CharacterSchema } from '../../interfaces/global'
+import { CharacterSchema } from 'interfaces/global'
 
 // eslint-disable-next-line react/display-name
 function Characters({ characters }: { characters: { results: CharacterSchema[]; error: string } }) {

@@ -1,5 +1,5 @@
 import { HStack, Box, Button, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel } from '@chakra-ui/react'
-import FilterContext from '../../contexts/FilterContext'
+import FilterContext from 'contexts/filterContext'
 import { MouseEvent, useContext } from 'react'
 
 interface FilterItemProps {

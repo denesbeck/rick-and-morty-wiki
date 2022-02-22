@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import useRenderStatus from '../../hooks/useRenderStatus'
-import { CharacterSchema } from '../../interfaces/global'
+import useRenderStatus from 'hooks/useRenderStatus'
+import { CharacterSchema } from 'interfaces/global'
 import { useRouter } from 'next/router'
 
 function Character({ character }: { character: CharacterSchema }) {

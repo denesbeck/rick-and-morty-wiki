@@ -13,7 +13,7 @@ interface StateSchema {
 }
 
 interface ActionSchema {
-    type: string
+    type: 'SEARCH_STRING' | 'STATUS' | 'SPECIES' | 'GENDER' | 'RESET'
     payload?: string
 }
 

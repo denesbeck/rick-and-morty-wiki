@@ -1,6 +1,6 @@
 import { Input, Center, InputGroup, InputRightAddon } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
-import FilterContext from '../../contexts/FilterContext'
+import FilterContext from 'contexts/filterContext'
 import { useContext } from 'react'
 
 function Search() {

@@ -1,20 +1,24 @@
 import { Center, Menu, MenuButton, MenuList, MenuItem, IconButton, Spacer } from '@chakra-ui/react'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { NavigatorItem } from '..'
+import FilterContext from 'contexts/filterContext'
+import { useContext } from 'react'
+import { NavigatorItem } from 'components'
 
 interface NavigatorProps {
     resetCurrentPage?: () => void
 }
 
 function Navigator({ resetCurrentPage }: NavigatorProps) {
-    const router = useRouter()
+    const filterContext = useContext(FilterContext)
     return (
         <Center className='flex w-full bg-gray-900 py-4'>
             <Link href='/'>
                 <a
-                    onClick={() => (router.pathname === '/' ? resetCurrentPage() : void 0)}
+                    onClick={() => {
+                        resetCurrentPage()
+                        filterContext.dispatch({ type: 'RESET' })
+                    }}
                     className='flex cursor-pointer space-x-2 pl-2 text-xl font-medium 2xs:pl-4 2xs:text-2xl xs:pl-12 xs:text-3xl'
                 >
                     <span className='text-gray-100'>Rick & Morty</span>

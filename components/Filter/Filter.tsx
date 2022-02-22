@@ -1,6 +1,6 @@
 import { Accordion, VStack, Button, Center, Stack } from '@chakra-ui/react'
-import { FilterItem } from '..'
-import FilterContext from '../../contexts/FilterContext'
+import { FilterItem } from 'components'
+import FilterContext from 'contexts/filterContext'
 import { useContext } from 'react'
 
 function Filter() {

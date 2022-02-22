@@ -1,9 +1,9 @@
-import '../styles/globals.css'
+import 'styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
 import { useReducer } from 'react'
-import FilterContext from '../contexts/FilterContext'
-import { reducer, initialState } from '../reducers/FilterReducer'
+import FilterContext from 'contexts/filterContext'
+import { reducer, initialState } from 'reducers/FilterReducer'
 
 function MyApp({ Component, pageProps }: AppProps) {
     const [state, dispatch] = useReducer(reducer, initialState)
