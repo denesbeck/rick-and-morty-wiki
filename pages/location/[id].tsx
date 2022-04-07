@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 
 interface Props {
     location: LocationSchema
-    locationIds: { id: number }[]
+    locationIds: number[]
 }
 
 const Location: NextPage<Props> = ({ location, locationIds }) => {
@@ -26,14 +26,13 @@ const Location: NextPage<Props> = ({ location, locationIds }) => {
     const fetchCharacters = async () => {
         try {
             setInfo({ name: location.name, dimension: location.dimension, type: location.type })
-            const characters = await Promise.all(
+            const characterList = await Promise.all(
                 location.residents.map(async (characterURL: string) => {
                     const res = await fetch(characterURL)
-                    const data = await res.json()
-                    return data
+                    return res.json()
                 })
             )
-            setCharacters({ results: characters })
+            setCharacters({ results: characterList })
         } catch (err) {
             setCharacters({ error: err })
         }
@@ -53,21 +52,19 @@ const Location: NextPage<Props> = ({ location, locationIds }) => {
                         <Center>
                             <Select
                                 onChange={(e) => {
-                                    e.target.value !== ''
-                                        ? router.push(`/location/${parseInt(e.target.value)}`)
-                                        : `/location/${1}`
+                                    router.push(`/location/${e.target.value.length ? parseInt(e.target.value) : 1}`)
                                 }}
                                 shadow={'sm'}
                                 maxW={'22rem'}
                             >
-                                {locationIds.map((location) => {
+                                {locationIds.map((locationId) => {
                                     return (
                                         <option
-                                            key={location.id}
-                                            value={location.id}
-                                            selected={id.toString() === location.id.toString() ? true : false}
+                                            key={locationId}
+                                            value={locationId}
+                                            selected={id.toString() === locationId.toString()}
                                         >
-                                            {`Location - ${location.id.toString().padStart(2, '0')}`}
+                                            {`Location - ${locationId.toString().padStart(2, '0')}`}
                                         </option>
                                     )
                                 })}
@@ -97,10 +94,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext) => {
     const { params } = context
-    const locationCount = await fetch('https://rickandmortyapi.com/api/location/').then((res) => res.json())
-    const locationIds = Array.from({ length: locationCount.info.count }, (_, i) => i + 1).map((el) => {
-        return { id: el }
-    })
+    const locations = await fetch('https://rickandmortyapi.com/api/location/').then((locationsResult) => locationsResult.json())
+    const locationIds = Array.from({ length: locations.info.count }, (_, i) => i + 1).map((id) => id)
     const res = await fetch(`https://rickandmortyapi.com/api/location/${params.id}`)
     const location = await res.json()
 

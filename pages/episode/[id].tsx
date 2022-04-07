@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 
 interface Props {
     episode: EpisodeSchema
-    episodeIds: { id: number }[]
+    episodeIds: number[]
 }
 
 const Episode: NextPage<Props> = ({ episode, episodeIds }) => {
@@ -26,14 +26,13 @@ const Episode: NextPage<Props> = ({ episode, episodeIds }) => {
     const fetchCharacters = async () => {
         try {
             setInfo({ name: episode.name, airDate: episode.air_date })
-            const characters = await Promise.all(
+            const charactersList = await Promise.all(
                 episode.characters.map(async (characterURL: string) => {
                     const res = await fetch(characterURL)
-                    const data = await res.json()
-                    return data
+                    return res.json()
                 })
             )
-            setCharacters({ results: characters })
+            setCharacters({ results: charactersList })
         } catch (err) {
             setCharacters({ error: err })
         }
@@ -53,19 +52,19 @@ const Episode: NextPage<Props> = ({ episode, episodeIds }) => {
                         <Center>
                             <Select
                                 onChange={(e) => {
-                                    e.target.value !== '' ? router.push(`/episode/${parseInt(e.target.value)}`) : `/episode/${1}`
+                                    router.push(`/episode/${e.target.value.length ? parseInt(e.target.value) : 1}`)
                                 }}
                                 shadow={'sm'}
                                 maxW={'22rem'}
                             >
-                                {episodeIds.map((episode) => {
+                                {episodeIds.map((episodeId) => {
                                     return (
                                         <option
-                                            key={episode.id}
-                                            value={episode.id}
-                                            selected={id.toString() === episode.id.toString() ? true : false}
+                                            key={episodeId}
+                                            value={episodeId}
+                                            selected={id.toString() === episodeId.toString()}
                                         >
-                                            {`Episode - ${episode.id.toString().padStart(2, '0')}`}
+                                            {`Episode - ${episodeId.toString().padStart(2, '0')}`}
                                         </option>
                                     )
                                 })}
@@ -95,10 +94,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext) => {
     const { params } = context
-    const episodeCount = await fetch('https://rickandmortyapi.com/api/episode/').then((res) => res.json())
-    const episodeIds = Array.from({ length: episodeCount.info.count }, (_, i) => i + 1).map((el) => {
-        return { id: el }
-    })
+    const episodes = await fetch('https://rickandmortyapi.com/api/episode/').then((episodesResult) => episodesResult.json())
+    const episodeIds = Array.from({ length: episodes.info.count }, (_, i) => i + 1).map((id) => id)
     const res = await fetch(`https://rickandmortyapi.com/api/episode/${params.id}`)
     const episode = await res.json()
 
