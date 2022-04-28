@@ -10,7 +10,7 @@ function Character({ character }: { character: CharacterSchema }) {
     return (
         <div
             onClick={() => router.push(`/character/${character.id}`)}
-            className='relative inline-block w-full transform cursor-pointer overflow-hidden rounded-md border-4 border-gray-200 bg-white hover:border-blue-400'
+            className='relative w-full max-w-[15rem] cursor-pointer overflow-hidden rounded-md border-4 border-gray-200 bg-white hover:border-blue-400'
         >
             <Image
                 width={500}
@@ -23,7 +23,7 @@ function Character({ character }: { character: CharacterSchema }) {
             />
             <div className='p-4'>
                 <div className='py-2 text-xl font-semibold text-gray-800'>{character.name}</div>
-                <div className='pt-2'>
+                <div className='mt-2'>
                     <div className='text-gray-500'>Last Location</div>
                     <div className='text-lg text-gray-800'>{character.location.name}</div>
                 </div>

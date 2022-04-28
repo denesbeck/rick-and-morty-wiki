@@ -12,7 +12,7 @@ function Characters({ characters }: { characters: { results: CharacterSchema[]; 
             </Center>
         )
     return (
-        <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+        <div className='flex w-full flex-wrap justify-center gap-6'>
             {characters.results.map((character: any, index: number) => (
                 <Character key={index} character={character} />
             ))}

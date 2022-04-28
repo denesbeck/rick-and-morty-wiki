@@ -14,7 +14,7 @@ function NavigatorItem({ path, label }: NavigatorItemProps) {
             <div className='hidden md:block'>
                 <Link href={path}>
                     <a
-                        className={`text-xl font-bold ${
+                        className={`text-xl ${
                             router.pathname.slice(0, -4) === path.slice(0, -1)
                                 ? 'text-blue-400 hover:text-blue-300'
                                 : 'text-gray-400 hover:text-gray-300'

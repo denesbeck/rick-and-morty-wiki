@@ -30,7 +30,7 @@ function Header({ name, airDate, dimension, type }: HeaderProps) {
                 {router.pathname === '/episode/[id]' ? <header className='xs:text-xl'>Air Date: {airDate}</header> : null}
                 {router.pathname === '/location/[id]' ? <header className='xs:text-xl'>Dimension: {dimension}</header> : null}
                 {router.pathname === '/location/[id]' ? <header className='xs:text-xl'>Type: {type}</header> : null}
-            </VStack>
+            </VStack>{' '}
         </Center>
     )
 }

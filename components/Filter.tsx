@@ -23,14 +23,15 @@ function Filter() {
     const filterContext = useContext(FilterContext)
 
     return (
-        <Center>
+        <Center className='w-full max-w-[25rem]'>
             <VStack
-                className='w-11/12 shadow-sm xs:w-4/6 sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-4/5'
+                className='shadow-sm'
                 border={'1px'}
                 borderColor={'gray.200'}
                 p={'2rem'}
                 rounded={'md'}
                 bgColor={'white'}
+                w={'full'}
             >
                 <Center className='mb-6 xl:mb-12'>
                     <Stack>

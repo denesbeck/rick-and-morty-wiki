@@ -6,7 +6,7 @@ import { useContext } from 'react'
 function Search() {
     const filterContext = useContext(FilterContext)
     return (
-        <Center className='flex shadow-sm md:w-1/2 xl:w-1/3'>
+        <Center className='mx-8 flex w-[80%] max-w-xl shadow-sm'>
             <InputGroup>
                 <Input
                     value={filterContext.state.searchString}

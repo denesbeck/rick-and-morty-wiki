@@ -1,8 +1,8 @@
 import type { NextPage, GetStaticPaths, GetStaticPropsContext, GetStaticProps } from 'next'
 import { EpisodeSchema } from 'interfaces/global'
 import { Characters, Header, Navigator } from 'components'
-import { VStack, Select, Center } from '@chakra-ui/react'
-import { useState, useEffect } from 'react'
+import { VStack, Select } from '@chakra-ui/react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
@@ -46,34 +46,33 @@ const Episode: NextPage<Props> = ({ episode, episodeIds }) => {
             <VStack spacing={'2rem'}>
                 <Navigator />
                 <Header name={info.name} airDate={info.airDate} />
-                <div className='grid w-full grid-cols-10'>
-                    <div className='col-span-full mx-4 mb-12 xl:col-span-3 xl:col-start-1 xl:mx-20'>
-                        <Center className='mb-4 text-2xl'>Pick Episode</Center>
-                        <Center>
-                            <Select
-                                onChange={(e) => {
-                                    router.push(`/episode/${e.target.value.length ? parseInt(e.target.value) : 1}`)
-                                }}
-                                shadow={'sm'}
-                                maxW={'22rem'}
-                            >
-                                {episodeIds.map((episodeId) => {
-                                    return (
-                                        <option
-                                            key={episodeId}
-                                            value={episodeId}
-                                            selected={id.toString() === episodeId.toString()}
-                                        >
-                                            {`Episode - ${episodeId.toString().padStart(2, '0')}`}
-                                        </option>
-                                    )
-                                })}
-                            </Select>
-                        </Center>
-                    </div>
-                    <div className='col-span-8 col-start-2 pb-20 xs:col-span-6 xs:col-start-3 lg:col-span-6 lg:col-start-3 xl:col-span-4 xl:col-start-4'>
-                        <Characters characters={characters} />
-                    </div>
+                <div className='flex w-screen flex-col items-center justify-center gap-6 px-10 pb-10 2xl:flex-row 2xl:items-start'>
+                    <VStack>
+                        <div className='mb-4 text-2xl'>Pick Episode</div>
+                        <Select
+                            onChange={(e: ChangeEvent) => {
+                                router.push(
+                                    `/episode/${
+                                        (e.target as HTMLInputElement).value.length
+                                            ? parseInt((e.target as HTMLInputElement).value)
+                                            : 1
+                                    }`
+                                )
+                            }}
+                            shadow={'sm'}
+                            minW={'20rem'}
+                            w={'full'}
+                        >
+                            {episodeIds.map((episodeId) => {
+                                return (
+                                    <option key={episodeId} value={episodeId} selected={id.toString() === episodeId.toString()}>
+                                        {`Episode - ${episodeId.toString().padStart(2, '0')}`}
+                                    </option>
+                                )
+                            })}
+                        </Select>
+                    </VStack>
+                    <Characters characters={characters} />
                 </div>
             </VStack>
         </>
